@@ -92,3 +92,19 @@ jobs:
         run: |
           kubectl apply -f ./product/k8s/product-depl.yml
           kubectl rollout restart deployment product-deployment -n lgcns
+
+      
+      # order 
+      - name: order image build and push docker image to ecr
+        env:
+          REGISTRY: 310095858382.dkr.ecr.us-west-1.amazonaws.com
+          REPOSITORY: order-service
+          IMAGE_TAG: latest
+        run: |
+          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -f ./order/Dockerfile ./order
+          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+
+      - name: eks kubectl order apply
+        run: |
+          kubectl apply -f ./order/k8s/order-depl.yml
+          kubectl rollout restart deployment order-deployment -n lgcns
