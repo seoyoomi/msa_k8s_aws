@@ -37,14 +37,6 @@ jobs:
       - name: aws ecr login
         uses: aws-actions/amazon-ecr-login@v1
 
-      # infra 구축   
-      - name: deploy infra
-        run: |
-          kubectl apply -f ./k8s/msa_ingress.yml
-          kubectl apply -f ./k8s/msa_kafka.yml
-          kubectl apply -f ./k8s/msa_redis.yml
-          kubectl apply -f ./k8s/msa_zookeeper.yml
-
       # image 생성하고 ecr push까지 자동화
       # apigateway, user, product, order
       - name: apigateway image build and push docker image to ecr
