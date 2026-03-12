@@ -30,3 +30,17 @@ jobs:
           aws-access-key-id: ${{secrets.AWS_KEY}}
           aws-secret-access-key: ${{secrets.AWS_SECRET}}
           aws-region: us-west-1
+
+      - name: aws eks cluster update
+        run: aws eks update-kubeconfig --region us-west-1 --name lgcns-seoyoomi-cluster
+
+      - name: aws ecr login
+        uses: aws-actions/amazon-ecr-login@v1
+
+      # infra 구축   
+      - name: deploy infra
+        run: |
+          kubectl apply -f ./k8s/msa-ingress.yml
+          kubectl apply -f ./k8s/msa-kafka.yml
+          kubectl apply -f ./k8s/msa-redis.yml
+          kubectl apply -f ./k8s/msa-zookeeper.yml
