@@ -92,3 +92,19 @@ jobs:
         run: |
           kubectl apply -f ./user/k8s/user-depl.yml
           kubectl rollout restart deployment user-deployment -n lgcns
+
+    
+      # product 
+      - name: product image build and push docker image to ecr
+        env:
+          REGISTRY: 310095858382.dkr.ecr.us-west-1.amazonaws.com
+          REPOSITORY: product-service
+          IMAGE_TAG: latest
+        run: |
+          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -f ./product/Dockerfile ./apigateway
+          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+
+      - name: eks kubectl product apply
+        run: |
+          kubectl apply -f ./product/k8s/product-depl.yml
+          kubectl rollout restart deployment product-deployment -n lgcns
