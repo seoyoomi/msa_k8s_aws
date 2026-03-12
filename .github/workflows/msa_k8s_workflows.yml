@@ -61,22 +61,6 @@ jobs:
           kubectl apply -f ./apigateway/k8s/apigateway-depl.yml
           kubectl rollout restart deployment apigateway-deployment -n lgcns
 
-          
-      # user  
-      - name: user image build and push docker image to ecr
-        env:
-          REGISTRY: 310095858382.dkr.ecr.us-west-1.amazonaws.com
-          REPOSITORY: user-service
-          IMAGE_TAG: latest
-        run: |
-          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -f ./user/Dockerfile ./apigateway
-          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
-
-      - name: eks kubectl user apply
-        run: |
-          kubectl apply -f ./user/k8s/user-depl.yml
-          kubectl rollout restart deployment user-deployment -n lgcns
-
       
       # user  
       - name: user image build and push docker image to ecr
@@ -85,7 +69,7 @@ jobs:
           REPOSITORY: user-service
           IMAGE_TAG: latest
         run: |
-          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -f ./user/Dockerfile ./apigateway
+          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -f ./user/Dockerfile ./user
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
 
       - name: eks kubectl user apply
@@ -101,7 +85,7 @@ jobs:
           REPOSITORY: product-service
           IMAGE_TAG: latest
         run: |
-          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -f ./product/Dockerfile ./apigateway
+          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -f ./product/Dockerfile ./product
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
 
       - name: eks kubectl product apply
